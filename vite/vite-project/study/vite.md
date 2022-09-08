@@ -10,7 +10,11 @@ Vite 使用 esbuild 将 TypeScript 转译到 JavaScript，约是 tsc 速度�
 
 ```npm init vite@latest```
 
-![image-20220908190303466](C:\Users\Godk\AppData\Roaming\Typora\typora-user-images\image-20220908190303466.png)
+![image-20220908190303466](image/image-20220908190303466.png)
+
+
+
+
 
 
 
