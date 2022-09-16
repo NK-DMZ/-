@@ -5,12 +5,6 @@
 Vite 仅执行 .ts 文件的转译工作，不执行任何类型检查。
 Vite 使用 esbuild 将 TypeScript 转译到 JavaScript，约是 tsc 速度的 20~30 倍，同时 HMR 更新反映到浏览器的时间小于 50ms。
 
-
-
-## 特点
-
-
-
 ## 使用
 ## react
 
@@ -184,23 +178,47 @@ https://blog.csdn.net/majing0520/article/details/115352843
 
 
 
+# vite.config.ts
 
+默认内容
 
+```
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+export default defineConfig({
+  plugins: [react()]
+})
+```
 
+## 默认启动端口
 
+```
+  server: {
+    port: 5000
+  },
+```
 
+![image-20220916111956604](image/image-20220916111956604.png)
 
+# 解析配置时Vite 做了这些事
 
+终端中输入子命令后，会通过 cleanOptions 对全局参数做过滤，随后通过 createServer 创建 http 服务器。
 
+![img](image/1c6b34a6696b1ebda7e4be6465799c51.jpg)
 
+对于整个 Vite 应用而言，参数不仅只从命令中获取，也会从上述 configFile 指向的配置文件中加载。配置合并之后，就会去调用插件的 config 钩子，钩子参数就是完整的 config 信息。随后便会对部分配置（上图中橙色部分）做 normalize （规范化），最后执行插件的 resolvedConfig 钩子，整个配置解析过程就结束了。
 
+用一张图描述加载配置的过程：
 
+![img](image/801aa5f54c73e2c877599d92779b055d.jpg)
 
+1. 先在当前和父级目录寻找 package.json 文件，找到后返回文件内容；
+2. 例子中配置文件是 vite.config.ts，所以会使用 esbuild 构建输出 CJS 结果；
+3. 扩展 require.extensions[.ts]，通过 module._compile 编译加载的 ts 文件；
+4. 判断获取到的 config 是不是函数，是的话传入 configEnv 执行函数并获取结果；
+5. 最后将第四步结果跟 CLI 的参数进行 merge，得到 config。
 
-
-
-
-
+了解完整个流程，如果让你去实现一个支持复杂配置的命令行程序，为了提高配置的易用性，就可以模仿 Vite 通过 defineConfig 提供完备的 TypeScript 类型提示，然后使用 esbuild 进行构建，最后扩展 require.extensions 去获取配置。
 
 
 
