@@ -220,7 +220,11 @@ export default defineConfig({
 
 了解完整个流程，如果让你去实现一个支持复杂配置的命令行程序，为了提高配置的易用性，就可以模仿 Vite 通过 defineConfig 提供完备的 TypeScript 类型提示，然后使用 esbuild 进行构建，最后扩展 require.extensions 去获取配置。
 
+# 关注度对比
 
+https://trends.google.com/trends/explore?date=2022-03-19%202022-09-19&q=vite,webpack
+
+![image-20220919014839485](image/image-20220919014839485.png)
 
 
 
